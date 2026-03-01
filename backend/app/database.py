@@ -5,6 +5,7 @@ from app.config import settings
 # --- МАГИЯ ДЛЯ FASTAPI ---
 # Принудительно делаем ссылку асинхронной, даже если в настройках Railway указана обычная
 db_url = str(settings.DATABASE_URL)
+
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
 elif db_url.startswith("postgres://"):
@@ -12,6 +13,12 @@ elif db_url.startswith("postgres://"):
 
 if "sslmode=require" in db_url:
     db_url = db_url.replace("sslmode=require", "ssl=require")
+
+# УБИРАЕМ channel_binding, КОТОРЫЙ ЛОМАЕТ ASYNCPG
+if "channel_binding" in db_url:
+    # Отрезаем этот параметр, независимо от того, через & или через ? он добавлен
+    db_url = db_url.split("&channel_binding")[0]
+    db_url = db_url.split("?channel_binding")[0]
 # -------------------------
 
 engine = create_async_engine(
