@@ -26,7 +26,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://giftsync-cin6mnqj7-komrons-projects-9d64ce72.vercel.app", # Ваша текущая ссылка
+        "https://giftsync-gamma.vercel.app", # Ваша текущая ссылка
     ],
     allow_origin_regex=r"https://.*\.vercel\.app", # РАЗРЕШАЕТ ВСЕ ПОДДОМЕНЫ VERCEL
     allow_credentials=True,
