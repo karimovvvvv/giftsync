@@ -20,17 +20,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# --- НАСТРОЙКА CORS (ИСПРАВЛЕНО) ---
-# allow_origin_regex позволит работать любым ссылкам от Vercel (включая превью и основной домен)
+# --- НАСТРОЙКА CORS ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://giftsync-gamma.vercel.app", # Ваша текущая ссылка
-    ],
-    allow_origin_regex=r"https://.*\.vercel\.app", # РАЗРЕШАЕТ ВСЕ ПОДДОМЕНЫ VERCEL
+    allow_origin_regex=r"https://.*\.vercel\.app", 
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
