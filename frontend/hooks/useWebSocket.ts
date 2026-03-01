@@ -3,7 +3,10 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import type { WSEvent } from '@/types'
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8000'
+// 1. Берем наш рабочий API URL из Vercel
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+// 2. Убираем слеш на конце (если есть) и меняем http(s) на ws(s) автоматически!
+const WS_URL = API_URL.replace(/\/$/, '').replace(/^http/, 'ws')
 
 interface UseWebSocketOptions {
     slug: string
@@ -23,12 +26,14 @@ export function useWebSocket({ slug, onEvent, enabled = true }: UseWebSocketOpti
         if (!enabled || !slug) return
         if (wsRef.current?.readyState === WebSocket.OPEN) return
 
+        // Подключаемся по правильному защищенному адресу
         const ws = new WebSocket(`${WS_URL}/ws/${slug}`)
         wsRef.current = ws
 
         ws.onopen = () => {
             setIsConnected(true)
             retryCount.current = 0
+            console.log(`[WebSocket] Успешно подключено к: ${slug}`) // Добавил лог для удобства
         }
 
         ws.onmessage = (e) => {
