@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "change-me-in-production-please"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 дней
     ALGORITHM: str = "HS256"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: list[str] = ["*"]
 
 
 settings = Settings()
